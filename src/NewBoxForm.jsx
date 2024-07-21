@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 
-
 function NewBoxForm({ createBox }) {
     const [formData, setFormData] = useState({
         width: "",
@@ -19,9 +18,16 @@ function NewBoxForm({ createBox }) {
 
     const handleSubmit = e => {
         e.preventDefault();
-        createBox(...formData, id: uuid());
+        const { width, height, backgroundColor } = formData;
+        if (!width || !height || !backgroundColor) {
+            alert("All fields are required!");
+            return;
+        }
+        createBox({...formData, id: uuid()});
         setFormData({ width: "", height: "", backgroundColor: "" });
     };
+
+    const isFormValid = formData.width && formData.height && formData.backgroundColor;
 
     return (
         <form onSubmit={handleSubmit}>
@@ -55,7 +61,7 @@ function NewBoxForm({ createBox }) {
                     onChange={handleChange}
                 />
             </div>
-            <button>Add Box</button>
+            <button disabled={!isFormValid}>Add Box</button>
         </form>
     );
 }
